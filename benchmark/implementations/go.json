@@ -1,0 +1,51 @@
+{
+  "id": "go",
+  "language": "Go",
+  "language_version": "1.27.1",
+  "runtime": "Go native runtime 1.27.1",
+  "libraries": {
+    "http": "net/http (stdlib 1.27.1)",
+    "json": "encoding/json (stdlib 1.27.1)",
+    "crypto": "crypto/aes + crypto/cipher (stdlib 1.27.1)",
+    "postgres": "github.com/jackc/pgx/v5 v5.11.0"
+  },
+  "build_command": "docker build -t benchmark-api-go:local apis/go",
+  "build_flags": [
+    "CGO_ENABLED=0",
+    "-trimpath",
+    "-ldflags=-s -w"
+  ],
+  "image": "benchmark-api-go:local",
+  "build_image": "golang:1.27.1",
+  "runtime_image": "scratch",
+  "entrypoint": [
+    "/api"
+  ],
+  "concurrency": {
+    "processes": 1,
+    "model": "net/http goroutines with runtime-managed OS threads",
+    "gomaxprocs": "runtime default, container aware",
+    "db_pool_max": 10
+  },
+  "gc": "Go concurrent GC; default GOGC and GOMEMLIMIT",
+  "jit": false,
+  "timeouts_seconds": {
+    "database": 5,
+    "http_read": 5,
+    "http_write": 10,
+    "http_idle": 60
+  },
+  "prepared_statement_cache": false,
+  "notes": [
+    "HTTP/1.1 keep-alive without TLS",
+    "Native pgx pool avoids database/sql automatic operation retries",
+    "Includes all Go runtime threads in container measurements"
+  ],
+  "schema_version": 1,
+  "build_context": "apis/go",
+  "resources": {
+    "cpu_limit": 1,
+    "memory_limit_bytes": 268435456,
+    "swap_limit_bytes": 0
+  }
+}

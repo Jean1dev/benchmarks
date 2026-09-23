@@ -1,0 +1,46 @@
+# Local configuration and secrets (keep the documented template).
+.env
+.env.*
+!.env.example
+
+# Python environments, bytecode and tool caches.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Installed dependencies and generated builds; lockfiles remain versioned.
+node_modules/
+target/
+build/
+dist/
+coverage/
+*.class
+*.jar
+/apis/java/lib/
+/apis/java/classes/
+/apis/go/benchmark-api-go
+/apis/go/go
+*.test
+
+# Local execution output; retain the future shared result schema.
+/benchmark/verification.json
+/results/*
+!/results/schema.md
+/reports/
+*.log
+*.prof
+
+# Editor and OS metadata.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

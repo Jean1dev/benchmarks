@@ -1,0 +1,55 @@
+{
+  "id": "python",
+  "language": "Python",
+  "version": "3.14.7",
+  "runtime": "CPython 3.14.7 (GIL enabled)",
+  "image": "benchmark-api-python:local",
+  "base_image": "python:3.14.7-slim-bookworm",
+  "build": "docker build -t benchmark-api-python:local apis/python",
+  "entrypoint": [
+    "python",
+    "-O",
+    "app.py"
+  ],
+  "libraries": {
+    "aiohttp": "3.14.3",
+    "asyncpg": "0.31.0",
+    "cryptography": "50.0.1"
+  },
+  "dependency_lock": "apis/python/requirements.txt",
+  "concurrency": {
+    "processes": 1,
+    "event_loops": 1,
+    "workers": 1,
+    "db_pool_min": 1,
+    "db_pool_max": 10
+  },
+  "gc": "CPython default reference counting and cyclic GC",
+  "jit": "not explicitly enabled; standard official CPython image",
+  "flags": [
+    "-O",
+    "PYTHONUNBUFFERED=1",
+    "PYTHONDONTWRITEBYTECODE=1"
+  ],
+  "timeouts_seconds": {
+    "database_connect": 5,
+    "database_operation_including_pool_wait": 5,
+    "http_body_read": 5,
+    "http_keepalive": 60,
+    "shutdown": 10
+  },
+  "limitations": [
+    "aiohttp does not expose a separate HTTP response write deadline; default asyncio transport backpressure applies",
+    "aiohttp HTTP parser errors occur before application middleware and may use framework default error bodies",
+    "HTTP library, PostgreSQL driver and cryptographic library contain native code"
+  ],
+  "schema_version": 1,
+  "language_version": "3.14.7",
+  "build_command": "docker build -t benchmark-api-python:local apis/python",
+  "build_context": "apis/python",
+  "resources": {
+    "cpu_limit": 1,
+    "memory_limit_bytes": 268435456,
+    "swap_limit_bytes": 0
+  }
+}

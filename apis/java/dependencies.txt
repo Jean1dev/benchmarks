@@ -1,0 +1,5 @@
+org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar
+com/zaxxer/HikariCP/7.1.0/HikariCP-7.1.0.jar
+com/google/code/gson/gson/2.14.0/gson-2.14.0.jar
+org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
+org/slf4j/slf4j-nop/2.0.17/slf4j-nop-2.0.17.jar

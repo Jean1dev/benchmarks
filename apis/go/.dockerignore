@@ -1,0 +1,7 @@
+.git
+.env
+.env.*
+benchmark-api-go
+go
+*.test
+*.prof

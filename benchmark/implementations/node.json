@@ -1,0 +1,54 @@
+{
+  "id": "node",
+  "language": "JavaScript",
+  "language_version": "ECMAScript as supported by Node.js 24.21.0",
+  "runtime": "Node.js 24.21.0 LTS / V8",
+  "libraries": {
+    "http": "node:http 24.21.0",
+    "json": "JSON native V8",
+    "crypto": "node:crypto 24.21.0 / OpenSSL",
+    "postgres": "pg 8.23.0"
+  },
+  "build_command": "docker build -t benchmark-api-node:local apis/node",
+  "build_flags": [
+    "npm ci --omit=dev --ignore-scripts"
+  ],
+  "image": "benchmark-api-node:local",
+  "runtime_image": "node:24.21.0-bookworm-slim",
+  "entrypoint": [
+    "node",
+    "server.js"
+  ],
+  "concurrency": {
+    "processes": 1,
+    "workers": 1,
+    "model": "single JavaScript event loop with runtime auxiliary threads",
+    "db_pool_max": 10
+  },
+  "gc": "V8 default GC and heap settings",
+  "jit": true,
+  "runtime_flags": [],
+  "environment": {
+    "NODE_ENV": "production"
+  },
+  "timeouts_seconds": {
+    "database_total": 5,
+    "database_statement": 5,
+    "http_read": 5,
+    "http_write_inactivity": 10,
+    "http_idle": 60
+  },
+  "notes": [
+    "HTTP request timeout checked every 1 second",
+    "Write timeout is socket inactivity, not absolute deadline",
+    "HTTP parser failures/timeouts before handler follow native Node responses",
+    "AES-GCM executes synchronously on JavaScript event loop"
+  ],
+  "schema_version": 1,
+  "build_context": "apis/node",
+  "resources": {
+    "cpu_limit": 1,
+    "memory_limit_bytes": 268435456,
+    "swap_limit_bytes": 0
+  }
+}

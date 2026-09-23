@@ -1,0 +1,63 @@
+{
+  "id": "java",
+  "language": "Java",
+  "version": "25.0.2+10",
+  "runtime": "Eclipse Temurin HotSpot 25.0.2+10",
+  "image": "benchmark-api-java:local",
+  "base_image": "eclipse-temurin:25.0.2_10-jre-noble",
+  "build_image": "eclipse-temurin:25.0.2_10-jdk-noble",
+  "build": "docker build -t benchmark-api-java:local apis/java",
+  "libraries": {
+    "postgresql-jdbc": "42.7.13",
+    "HikariCP": "7.1.0",
+    "gson": "2.14.0",
+    "slf4j-api": "2.0.17",
+    "slf4j-nop": "2.0.17"
+  },
+  "dependency_checksums": "apis/java/dependencies.sha256",
+  "http": "jdk.httpserver.HttpServer",
+  "crypto": "JCA AES/GCM/NoPadding",
+  "concurrency": {
+    "processes": 1,
+    "request_workers": "one virtual thread per request",
+    "active_processor_count": 1,
+    "db_pool_min": 1,
+    "db_pool_max": 10
+  },
+  "gc": "SerialGC",
+  "jit": "HotSpot default tiered compilation",
+  "flags": [
+    "-Xms16m",
+    "-Xmx128m",
+    "-XX:+UseSerialGC",
+    "-XX:ActiveProcessorCount=1",
+    "-XX:ReservedCodeCacheSize=32m",
+    "-XX:MaxDirectMemorySize=16m",
+    "-Dsun.net.httpserver.maxReqTime=5",
+    "-Dsun.net.httpserver.maxRspTime=10",
+    "-Dsun.net.httpserver.idleInterval=60"
+  ],
+  "timeouts_seconds": {
+    "pool_acquire": 5,
+    "database_connect": 5,
+    "database_statement": 5,
+    "database_socket": 5,
+    "http_read": 5,
+    "http_write": 10,
+    "http_keepalive": 60
+  },
+  "limitations": [
+    "Pool acquisition and statement execution have separate deadlines; combined latency can approach 10 seconds",
+    "JDK HTTP timeout enforcement has timer granularity",
+    "Protocol parse errors before the application handler may use native server response formats"
+  ],
+  "schema_version": 1,
+  "language_version": "25.0.2+10",
+  "build_command": "docker build -t benchmark-api-java:local apis/java",
+  "build_context": "apis/java",
+  "resources": {
+    "cpu_limit": 1,
+    "memory_limit_bytes": 268435456,
+    "swap_limit_bytes": 0
+  }
+}

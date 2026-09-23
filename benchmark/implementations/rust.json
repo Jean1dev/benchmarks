@@ -1,0 +1,73 @@
+{
+  "id": "rust",
+  "language": "Rust",
+  "language_version": "1.90.0",
+  "runtime": "native binary / Tokio 1.47.1",
+  "image": "benchmark-api-rust:local",
+  "dockerfile": "apis/rust/Dockerfile",
+  "build_context": "apis/rust",
+  "build_command": "cargo build --release --locked",
+  "entrypoint": "/usr/local/bin/benchmark-api-rust",
+  "dependencies": {
+    "hyper": "1.7.0",
+    "hyper-util": "0.1.17",
+    "tokio": "1.47.1",
+    "tokio-postgres": "0.7.15",
+    "deadpool-postgres": "0.14.1",
+    "aes-gcm": "0.10.3",
+    "serde": "1.0.228",
+    "serde_json": "1.0.145",
+    "uuid": "1.18.1",
+    "base64": "0.22.1",
+    "bytes": "1.10.1",
+    "http-body-util": "0.1.3"
+  },
+  "dependency_lockfile": "apis/rust/Cargo.lock",
+  "concurrency": {
+    "processes": 1,
+    "async_worker_threads": 1,
+    "model": "Tokio tasks per HTTP/1.1 connection; auxiliary runtime threads possible",
+    "pool_max": 10
+  },
+  "gc": false,
+  "jit": false,
+  "flags": [
+    "--release",
+    "--locked",
+    "opt-level=3"
+  ],
+  "timeouts_seconds": {
+    "db_operation": 5,
+    "db_connect": 5,
+    "http_headers_read": 5,
+    "http_body_read": 5,
+    "http_write": null
+  },
+  "limitations": [
+    "Hyper HTTP/1 builder has no direct write timeout; no write deadline configured."
+  ],
+  "base_images": [
+    "rust:1.90.0-bookworm",
+    "debian:bookworm-20250908-slim"
+  ],
+  "schema_version": 1,
+  "libraries": {
+    "hyper": "1.7.0",
+    "hyper-util": "0.1.17",
+    "tokio": "1.47.1",
+    "tokio-postgres": "0.7.15",
+    "deadpool-postgres": "0.14.1",
+    "aes-gcm": "0.10.3",
+    "serde": "1.0.228",
+    "serde_json": "1.0.145",
+    "uuid": "1.18.1",
+    "base64": "0.22.1",
+    "bytes": "1.10.1",
+    "http-body-util": "0.1.3"
+  },
+  "resources": {
+    "cpu_limit": 1,
+    "memory_limit_bytes": 268435456,
+    "swap_limit_bytes": 0
+  }
+}

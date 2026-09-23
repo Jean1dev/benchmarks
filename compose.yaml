@@ -1,0 +1,71 @@
+name: language-benchmark
+
+x-api: &api
+  cpus: 1.0
+  mem_limit: 256m
+  memswap_limit: 256m
+  restart: "no"
+  environment:
+    PORT: "8080"
+    DATABASE_URL: postgresql://benchmark:benchmark@postgres:5432/benchmark?sslmode=disable
+    DB_POOL_MAX: "10"
+    ENCRYPTION_KEY_BASE64: ${ENCRYPTION_KEY_BASE64:?Execute python3 scripts/init_env.py}
+  ports:
+    - "127.0.0.1:${API_PORT:-8080}:8080"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:17.11-bookworm
+    cpus: 1.0
+    mem_limit: 512m
+    memswap_limit: 512m
+    restart: "no"
+    environment:
+      POSTGRES_USER: benchmark
+      POSTGRES_PASSWORD: benchmark
+      POSTGRES_DB: benchmark
+    command: ["postgres", "-c", "fsync=on", "-c", "synchronous_commit=on", "-c", "full_page_writes=on", "-c", "shared_buffers=128MB", "-c", "max_connections=30", "-c", "statement_timeout=5000"]
+    volumes:
+      - benchmark-data:/var/lib/postgresql/data
+      - ./benchmark/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benchmark -d benchmark"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  api-go:
+    <<: *api
+    profiles: ["go"]
+    build: ./apis/go
+    image: benchmark-api-go:local
+
+  api-rust:
+    <<: *api
+    profiles: ["rust"]
+    build: ./apis/rust
+    image: benchmark-api-rust:local
+
+  api-python:
+    <<: *api
+    profiles: ["python"]
+    build: ./apis/python
+    image: benchmark-api-python:local
+
+  api-node:
+    <<: *api
+    profiles: ["node"]
+    build: ./apis/node
+    image: benchmark-api-node:local
+
+  api-java:
+    <<: *api
+    profiles: ["java"]
+    build: ./apis/java
+    image: benchmark-api-java:local
+
+volumes:
+  benchmark-data:

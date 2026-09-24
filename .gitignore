@@ -32,8 +32,13 @@ coverage/
 # Local execution output; retain the future shared result schema.
 /benchmark/verification.json
 /results/*
+!/results/
 !/results/schema.md
 /reports/
+/load-tests/target/
+/load-tests-smoke*/
+/gatling-check-results/
+/.benchmark-data/
 *.log
 *.prof
 

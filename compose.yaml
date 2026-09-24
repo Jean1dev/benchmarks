@@ -67,5 +67,19 @@ services:
     build: ./apis/java
     image: benchmark-api-java:local
 
+  gatling:
+    profiles: ["load-test"]
+    build: ./load-tests
+    image: benchmark-gatling:local
+    cpus: 2.0
+    mem_limit: 2g
+    memswap_limit: 2g
+    restart: "no"
+    environment:
+      MAVEN_OPTS: "-Xms256m -Xmx1024m -XX:+UseSerialGC -XX:ActiveProcessorCount=2"
+    volumes:
+      - ./.benchmark-data:/data:ro
+      - ./results:/results
+
 volumes:
   benchmark-data:

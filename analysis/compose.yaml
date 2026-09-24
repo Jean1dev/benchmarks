@@ -1,0 +1,15 @@
+name: benchmark-analysis
+services:
+  analysis:
+    build:
+      context: ..
+      dockerfile: analysis/Dockerfile
+    cpus: ${ANALYSIS_CPUS:-2.0}
+    mem_limit: ${ANALYSIS_MEMORY:-2g}
+    memswap_limit: ${ANALYSIS_MEMORY:-2g}
+    network_mode: none
+    read_only: true
+    user: "${ANALYSIS_UID:-0}:${ANALYSIS_GID:-0}"
+    volumes:
+      - ../results:/workspace/results:ro
+      - ../reports:/workspace/reports:rw

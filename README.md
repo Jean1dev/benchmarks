@@ -42,6 +42,14 @@ Em cgroups v2, PostgreSQL deve apresentar `536870912`, `0` e `100000 100000`. Pa
 
 Após construir as cinco imagens, `python3 tests/interoperability.py` faz cinco escritas e 25 leituras cruzadas, alternando as APIs e deixando-as paradas ao terminar. O PostgreSQL permanece disponível. Não execute esse teste junto com uma campanha de carga.
 
-Os testes funcionais não medem desempenho. Gatling e os relatórios serão implementados nas etapas dos prompts 02 e 03. Compare implementações completas; diferenças de bibliotecas, runtime e timeouts documentados também influenciam resultados.
+Os testes funcionais não medem desempenho. A carga Gatling está em `load-tests/` e o processamento de relatórios em `analysis/`. Compare implementações completas; diferenças de bibliotecas, runtime e timeouts documentados também influenciam resultados.
+
+## Carga Gatling
+
+O projeto em `load-tests/` fixa Gatling, Scala, Maven e JDK, separa os modelos aberto e fechado e fornece o orquestrador de smoke/campanha. Consulte [load-tests/README.md](load-tests/README.md). O smoke é executável com `python3 load-tests/scripts/run_campaign.py --campaign smoke --implementation go --scenario post`; uma campanha completa exige tempo e armazenamento proporcionais à matriz definida em `benchmark/config.json`.
 
 Java usa heap máximo de 128 MiB, SerialGC e limites de memória auxiliares explícitos; os demais runtimes mantêm as configurações de GC/heap descritas em seus manifests. A aquisição de conexão e execução da consulta Java têm limites separados de 5 segundos; nas outras implementações, o prazo combinado é 5 segundos. Python e Rust não configuram deadline independente de escrita HTTP, e Node usa timeout de inatividade. Essas diferenças devem acompanhar os resultados de saturação e clientes lentos.
+
+## Relatórios comparativos
+
+Execute `mkdir -p reports` e `docker compose -f analysis/compose.yaml run --build --rm analysis`. O serviço independente usa inicialmente 2 CPUs/2 GiB, lê `results/` somente para leitura e grava `reports/<campaign_id>/`. Não executa carga. Instruções, critérios de validade e testes: [analysis/README.md](analysis/README.md). Relatórios sem medições válidas são explicitamente parciais e não apresentam rankings.

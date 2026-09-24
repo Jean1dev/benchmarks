@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "campaign_id": "language-api-benchmark",
+  "seed": "orca-benchmark-2026-09",
+  "gatling_version": "3.14.9",
+  "scala_version": "2.13.17",
+  "jdk_version": "17.0.17+10",
+  "maven_version": "3.9.11",
+  "implementations": ["go", "rust", "python", "node", "java"],
+  "scenarios": ["post", "get", "mixed"],
+  "payload_bytes": [128, 1024, 16384],
+  "database": {"initial_records": 100000, "selection": "uniform_with_replacement"},
+  "warmup_seconds": 30,
+  "measurement_seconds": 120,
+  "drain_seconds": 10,
+  "repetitions": 5,
+  "closed_users": [1, 10, 50, 100],
+  "open_rates_per_second": [10, 50, 100, 250, 500, 1000],
+  "smoke": {"warmup_seconds": 2, "measurement_seconds": 5, "repetitions": 1, "closed_users": [1], "open_rates_per_second": [1], "payload_bytes": [128]},
+  "http": {"timeout_seconds": 5, "keep_alive": true, "compression": false, "retries": false},
+  "resources": {
+    "api_memory_bytes": 268435456,
+    "api_cpus": 1,
+    "postgres_memory_bytes": 536870912,
+    "postgres_cpus": 1,
+    "gatling_memory_bytes": 2147483648,
+    "gatling_cpus": 2
+  },
+  "slo": {"p95_success_latency_ms_lte": 200, "failure_rate_percent_lte": 1},
+  "ordering": "rotate_implementation_order_by_repetition",
+  "notes": [
+    "Warmup and measurement are separate Gatling simulations/runs and are excluded from measured summaries.",
+    "POST warmup uses the same count across implementations and is completed before measurement.",
+    "No host cache clearing is performed; cold cache is not claimed.",
+    "Smoke runs never qualify for ranking."
+  ]
+}

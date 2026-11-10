@@ -1,0 +1,44 @@
+name: benchmarks-banco
+
+services:
+  postgres:
+    image: postgres:17.11-bookworm
+    cpus: 1.0
+    mem_limit: 512m
+    memswap_limit: 512m
+    restart: "no"
+    environment:
+      POSTGRES_USER: banco
+      POSTGRES_PASSWORD: banco
+      POSTGRES_DB: banco
+    command: ["postgres", "-c", "fsync=on", "-c", "synchronous_commit=on", "-c", "full_page_writes=on", "-c", "shared_buffers=128MB", "-c", "max_connections=30", "-c", "statement_timeout=5000"]
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - banco-data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banco -d banco"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    cpus: 1.0
+    mem_limit: 256m
+    memswap_limit: 256m
+    restart: "no"
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgresql://banco:banco@postgres:5432/banco?sslmode=disable
+    ports:
+      - "127.0.0.1:${API_PORT:-8088}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  banco-data:

@@ -6,7 +6,7 @@ Implementações: Go, Rust, Python, Node.js (JavaScript) e Java. Cada uma usa o 
 
 Pré-requisitos: Docker com Compose e limites de cgroups disponíveis, Python 3 para scripts auxiliares. Não é necessário instalar os cinco runtimes no host.
 
-Na raiz do repositório:
+Na pasta `benchmarks-api`:
 
 ```bash
 bash scripts/api.sh go

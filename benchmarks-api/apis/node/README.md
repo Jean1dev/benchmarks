@@ -6,7 +6,7 @@ fixadas no package-lock.json. Contrato: `benchmark/contract.md`.
 
 ## Execução
 
-Na raiz do repositório:
+Em `benchmarks-api`:
 
 ```sh
 docker build -t benchmark-api-node:local apis/node

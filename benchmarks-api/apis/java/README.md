@@ -2,7 +2,7 @@
 
 Eclipse Temurin **25.0.2+10**, servidor HTTP nativo `jdk.httpserver`, criptografia JCA AES/GCM/NoPadding e `SecureRandom`. Dependências mínimas: PostgreSQL JDBC **42.7.13**, HikariCP **7.1.0**, Gson **2.14.0**, SLF4J API/NOP **2.0.17**. Sem framework web ou ORM. JARs têm versões e SHA-256 registrados em `dependencies.txt` e `dependencies.sha256`.
 
-Da raiz:
+Em `benchmarks-api`:
 
 ```sh
 docker build -t benchmark-api-java:local apis/java

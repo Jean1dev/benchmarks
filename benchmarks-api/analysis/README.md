@@ -1,6 +1,6 @@
 # Análise reproduzível
 
-Execute na raiz, sem subir APIs ou carga:
+Execute em `benchmarks-api`, sem subir APIs ou carga:
 
 ```sh
 mkdir -p reports

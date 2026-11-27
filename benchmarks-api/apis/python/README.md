@@ -2,7 +2,7 @@
 
 CPython **3.14.7**, aiohttp **3.14.3**, asyncpg **0.31.0** e cryptography **50.0.1**. O contrato e o schema ficam em `benchmark/contract.md` e `benchmark/schema.sql`. aiohttp fornece somente HTTP/roteamento; não há ORM nem framework de aplicação completo. Todas as dependências, inclusive transitivas, estão fixadas em `requirements.txt`.
 
-Da raiz do repositório:
+Em `benchmarks-api`:
 
 ```sh
 docker build -t benchmark-api-python:local apis/python
